@@ -23,13 +23,7 @@ exclude = ["tests"]
 
 # binary files
 [tool.setuptools.package-data]
-q2mysql55_win_local = ["mysql55_files/*.*", 
-    "mysql55_files/bin/*.*",     
-    "mysql55_files/data/mysql/*.*",
-    "mysql55_files/data/performance_schema/*.*",
-    "mysql55_files/share/*/*.*",
-    ]
-
+q2mysql55_win_local = ["mysql55_files/*.*/*.*/*.*", "mysql55_files/share/*"]
 
 [tool.ruff]
 line-length = 110
