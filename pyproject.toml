@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "q2-mysql55-win-local"
+version = "0.1.0"
+description = "Local MySQL 5.5 server"
+readme = "README.md"
+authors = [
+    { name = "Andrei Puchko" }
+]
+requires-python = ">=3.9"
+dependencies = []
+
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["q2-mysql55-win-local"]
+exclude = ["tests"]
+
+# binary files
+[tool.setuptools.package-data]
+q2zugferd = ["bin/*.exe"]
+
+
+[tool.ruff]
+line-length = 110

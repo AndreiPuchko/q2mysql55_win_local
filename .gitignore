@@ -1,0 +1,12 @@
+temp/*
+# Python artifacts
+*.egg
+*.egg-info/
+dist/
+build/
+*.pyc
+*.icc
+.coverage
+q2mysql55_win_local/mysql55_files/*
+local_mysql_database/*
+test_mysql_data/*
