@@ -35,7 +35,6 @@ class Q2MySQL55_Win_Local_Server:
 
         # Ensure my.ini exists
         ini_path = self._generate_my_ini(self.datadir, self.port)
-        print(self.port)
         args = [
             self.mysqld,
             f"--defaults-file={ini_path}",

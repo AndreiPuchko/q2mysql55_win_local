@@ -1,10 +1,21 @@
+New-Item -ItemType Directory -Force -Path ./dist
+
 $ProjectName = Split-Path (Get-Location) -Leaf
 Write-Host "=== $ProjectName build & release ===" -ForegroundColor Cyan
-
 $VersionPyPath = "$ProjectName/version.py"
 $LatestWheelName = "$ProjectName-0-py3-none-any.whl"
 
+$versionFile = "pyproject.toml"
+$content = Get-Content $versionFile
 
+$versionLine = $content | Where-Object { $_ -match '^version\s*=' }
+if (-not $versionLine) {
+    Write-Error "❌ version not found in pyproject.toml"
+    exit 1
+}
+
+$version = ($versionLine -split '"')[1]
+Write-Host "Current version: $version"
 
 function Save-TomlWithoutBOM {
     param (
@@ -28,8 +39,9 @@ if (Test-Path dist) {
 
 python -m build
 
+
+Copy-Item $ProjectName\version.py dist\version.py -Force
 $wheel = Get-ChildItem dist\$ProjectName-*-py3-none-any.whl | Select-Object -First 1
-Copy-Item $wheel.FullName dist\$ProjectName-0-py3-none-any.whl -Force
 Copy-Item $ProjectName\version.py dist\version.py -Force
 $latestFilePath = "dist\latest"
 Set-Content -Path $latestFilePath -Value $wheel.Name -Encoding UTF8
