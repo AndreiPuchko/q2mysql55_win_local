@@ -2,6 +2,8 @@ import subprocess
 import os
 import time
 import shutil
+import socket
+import psutil
 import importlib.resources as resources
 from pathlib import Path
 
@@ -28,10 +30,59 @@ class Q2MySQL55_Win_Local_Server:
         if not os.path.exists(self.mysqladmin):
             raise FileNotFoundError(f"mysqladmin.exe not found in {self.basedir}/bin")
 
+    def _resolve_mysql_port(self, datadir: str, port: int) -> int:
+        def port_used(p: int) -> bool:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(0.2)
+                return s.connect_ex(("127.0.0.1", p)) == 0
+
+        def mysql_matches_datadir(dd: str) -> bool:
+            if not os.path.isdir(dd):
+                return False
+
+            try:
+                files = os.listdir(dd)
+            except Exception:
+                return False
+
+            for fname in files:
+                if not fname.endswith(".pid"):
+                    continue
+
+                pid_path = os.path.join(dd, fname)
+                try:
+                    with open(pid_path, "r") as f:
+                        pid = int(f.read().strip())
+                except Exception:
+                    continue
+
+                try:
+                    p = psutil.Process(pid)
+                    exe = os.path.basename(p.exe()).lower()
+                    if "mysqld" in exe:
+                        return True
+                except Exception:
+                    continue
+
+            return False
+
+        p = port
+
+        while True:
+            if not port_used(p):
+                return p
+
+            if mysql_matches_datadir(datadir):
+                return p
+
+            p += 1
+
     def start(self, port: int, datadir: str):
         self.port = port
         self.datadir = os.path.realpath(datadir)
         self._check_datadir()
+
+        self.port = self._resolve_mysql_port(self.datadir, self.port)
 
         # Ensure my.ini exists
         ini_path = self._generate_my_ini(self.datadir, self.port)
@@ -64,7 +115,7 @@ class Q2MySQL55_Win_Local_Server:
         for _ in range(50):  # ~5 seconds
             time.sleep(0.1)
             if self._is_running():
-                return True
+                return self.port
 
         raise RuntimeError("MySQL server failed to start.")
 
@@ -86,7 +137,7 @@ class Q2MySQL55_Win_Local_Server:
                 root = resources.files(__package__)
                 return os.path.abspath(str(root / "mysql55_files"))
             else:
-                return f"{os.path.dirname( __file__)}/mysql55_files"
+                return f"{os.path.dirname(__file__)}/mysql55_files"
         except Exception:
             import pkg_resources
 
@@ -166,7 +217,7 @@ def run_test():
 
     print("=== 1) First run: starting MySQL server ===")
     srv = Q2MySQL55_Win_Local_Server()
-    srv.start(PORT, DB_PATH)
+    print(srv.start(PORT, DB_PATH))
     print("Server started.")
 
     # Connect using q2db
