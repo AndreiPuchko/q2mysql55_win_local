@@ -112,8 +112,8 @@ datadir={datadir}
 
 skip-innodb
 
-character-set-server=utf8
-collation-server=utf8_general_ci
+character-set-server=utf8mb4
+collation-server=utf8mb4_general_ci
 
 default-storage-engine=myisam
 
