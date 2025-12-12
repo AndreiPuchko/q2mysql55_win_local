@@ -1,3 +1,5 @@
+.\.venv\Scripts\activate
+
 New-Item -ItemType Directory -Force -Path ./dist
 
 $ProjectName = Split-Path (Get-Location) -Leaf
