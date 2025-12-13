@@ -188,12 +188,22 @@ max_allowed_packet=32M
         ini_path.write_text(content.strip(), encoding="utf-8")
         return str(ini_path)
 
-    def stop(self):
+    def stop(self, timeout=3):
         if not self._is_running():
             return
-
         try:
-            subprocess.run([self.mysqladmin, f"--port={self.port}", "--user=root", "shutdown"], timeout=3)
+            args = [self.mysqladmin, f"--port={self.port}", "--user=root", "shutdown"]
+            if timeout == 0:
+                subprocess.Popen(
+                    args,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    stdin=subprocess.DEVNULL,
+                    creationflags=0x00000008,
+                )
+                return
+            else:
+                subprocess.run(args, timeout=timeout)
         except Exception:
             pass
 
@@ -242,7 +252,7 @@ def run_test():
         database.insert("topic_table", {"name": f"topic {database.table('topic_table').row_count()}"})
 
     print("Stopping server...")
-    srv.stop()
+    srv.stop(timeout=3)
     print("Server stopped.")
 
     # SECOND START — verify persistence
