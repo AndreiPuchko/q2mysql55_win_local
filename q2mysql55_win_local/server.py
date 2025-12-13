@@ -114,7 +114,7 @@ class Q2MySQL55_Win_Local_Server:
         # Wait for start
         for _ in range(50):  # ~5 seconds
             time.sleep(0.1)
-            if self._is_running():
+            if self.is_running():
                 return self.port
 
         raise RuntimeError("MySQL server failed to start.")
@@ -128,7 +128,7 @@ class Q2MySQL55_Win_Local_Server:
         if not os.path.isdir(f"{self.datadir}/performance_schema"):
             shutil.copytree(f"{self.basedir}/data/performance_schema", f"{self.datadir}/performance_schema")
 
-    def _is_running(self):
+    def is_running(self):
         return self.process is not None and self.process.poll() is None
 
     def _find_binaries_dir(self) -> str:
@@ -189,7 +189,7 @@ max_allowed_packet=32M
         return str(ini_path)
 
     def stop(self, timeout=3):
-        if not self._is_running():
+        if not self.is_running():
             return
         try:
             args = [self.mysqladmin, f"--port={self.port}", "--user=root", "shutdown"]
@@ -207,7 +207,7 @@ max_allowed_packet=32M
         except Exception:
             pass
 
-        if self._is_running():
+        if self.is_running():
             self.process.terminate()
             try:
                 self.process.wait(timeout=2)
