@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "q2mysql55_win_local"
-version = "0.1.8"
+version = "0.1.9"
 description = "Embedded local MySQL 5.5 server for portable Windows applications"
 readme = "README.md"
 requires-python = ">=3.9"
