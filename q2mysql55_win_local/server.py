@@ -6,6 +6,7 @@ import socket
 import psutil
 import importlib.resources as resources
 from pathlib import Path
+import platform
 
 
 class Q2MySQL55_Win_Local_Server:
@@ -16,6 +17,9 @@ class Q2MySQL55_Win_Local_Server:
     """
 
     def __init__(self):
+        if platform.system() != "Windows":
+            raise RuntimeError("q2mysql55_win_local is Windows-only")
+
         self.process = None
         self.datadir = None
         self.port = None

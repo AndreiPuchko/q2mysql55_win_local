@@ -5,13 +5,29 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "q2mysql55_win_local"
 version = "0.1.8"
-description = "Local MySQL 5.5 server"
+description = "Embedded local MySQL 5.5 server for portable Windows applications"
 readme = "README.md"
-authors = [
-    { name = "Andrei Puchko" }
-]
 requires-python = ">=3.9"
-dependencies = ["psutil"]
+license = { text = "MIT" }
+authors = [{ name = "Andrei Puchko" }]
+dependencies = ["psutil; platform_system == 'Windows'"]
+keywords = [
+    "mysql",
+    "embedded-database",
+    "portable",
+    "windows",
+    "desktop-app",
+    "offline",
+]
+classifiers = [
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Database",
+    "Topic :: Software Development :: Embedded Systems",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+]
 
 [tool.setuptools]
 include-package-data = true
@@ -21,9 +37,8 @@ where = ["."]
 include = ["q2mysql55_win_local"]
 exclude = ["tests"]
 
-# binary files
 [tool.setuptools.package-data]
-q2mysql55_win_local = ["mysql55_files/*.*/*.*/*.*", "mysql55_files/share/*"]
+q2mysql55_win_local = ["mysql55_files/**/*"]
 
 [tool.ruff]
 line-length = 110

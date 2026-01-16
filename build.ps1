@@ -109,6 +109,9 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+python -m twine upload -u __token__   -p $env:PYPI_TOKEN   dist/*
+
+
 # -----------------------------
 # 8. make latest-wheel
 # -----------------------------

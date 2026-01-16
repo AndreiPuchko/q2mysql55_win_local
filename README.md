@@ -1,3 +1,7 @@
+⚠️ Windows-only. Embedded/local use only.
+⚠️ Ships MySQL 5.5 binaries for local embedded use
+⚠️ Not intended for networked or production servers
+
 # Q2MySQL55_Win_Local_Server
 
 A lightweight, embedded-style **MySQL 5.5 server wrapper for Windows**, bundled inside your Python package.  
@@ -106,7 +110,7 @@ Shutdown sequence:
 ## ⚠️ Requirements
 
 - Windows 10 or later  
-- Python 3.8+  
+- Python 3.9+  
 - Bundled MySQL 5.5 distribution in `mysql55_files`
 
 ---
