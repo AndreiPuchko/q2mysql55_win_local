@@ -30,22 +30,6 @@ This library:
 
 ---
 
-## 📦 Package Structure
-
-```
-your_package/
-    mysql55_files/
-        bin/
-            mysqld.exe
-            mysqladmin.exe
-        data/
-            mysql/
-            performance_schema/
-    q2mysql55_win_local_server.py
-```
-
----
-
 ## 🚀 Quick Start
 
 ```python
